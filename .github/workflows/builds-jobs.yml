@@ -4,20 +4,49 @@
 # Perhatian: Server Github Actions menggunakan zona waktu UTC.
 # WIB = UTC + 7 Jam.
 #
-# Job A (ophub): 02 September, 01:00 WIB -> 01 September, 18:00 UTC
-# Job B (ulo):   02 September, 11:00 WIB -> 02 September, 04:00 UTC (Jarak 10 Jam)
-# Job C (offc):  02 September, 21:00 WIB -> 02 September, 14:00 UTC (Jarak 10 Jam)
-# Job D (opt):   03 September, 07:00 WIB -> 03 September, 00:00 UTC (Jarak 10 Jam)
+# Job A (ophub): 02 September, 00:00 WIB -> 01 September, 17:00 UTC
+# Job B (ulo): 02 September, 03:00 WIB -> 01 September, 20:00 UTC
+# Job C (official): 02 September, 05:00 WIB -> 01 September, 22:00 UTC
+# Job D (ophub): 02 September, 07:00 WIB -> 02 September, 00:00 UTC
+# Job E (ulo): 02 September, 10:00 WIB -> 02 September, 03:00 UTC
+# Job F (official): 02 September, 12:00 WIB -> 02 September, 05:00 UTC
+# Job G (ophub): 02 September, 14:00 WIB -> 02 September, 07:00 UTC
+# Job H (ulo): 02 September, 17:00 WIB -> 02 September, 10:00 UTC
+# Job I (official): 02 September, 19:00 WIB -> 02 September, 12:00 UTC
+# Job J (ophub): 02 September, 21:00 WIB -> 02 September, 14:00 UTC
+# Job K (ulo): 03 September, 00:00 WIB -> 02 September, 17:00 UTC
+# Job L (official): 03 September, 02:00 WIB -> 02 September, 19:00 UTC
+# Job M (ophub): 03 September, 04:00 WIB -> 02 September, 21:00 UTC
+# Job N (ulo): 03 September, 07:00 WIB -> 03 September, 00:00 UTC
+# Job O (official): 03 September, 09:00 WIB -> 03 September, 02:00 UTC
+# Job P (ophub): 03 September, 11:00 WIB -> 03 September, 04:00 UTC
+# Job Q (ulo): 03 September, 14:00 WIB -> 03 September, 07:00 UTC
+# Job R (official): 03 September, 16:00 WIB -> 03 September, 09:00 UTC
 # =====================================================================
 
 name: Scheduled builds Jobs
 
 on:
   schedule:
-    - cron: '0 18 1 9 *' # Memicu Job A
-    - cron: '0 4 2 9 *'  # Memicu Job B
-    - cron: '0 14 2 9 *' # Memicu Job C
-    - cron: '0 0 3 9 *'  # Memicu Job D
+    - cron: '0 17 1 9 *' # Memicu Job A
+    - cron: '0 20 1 9 *' # Memicu Job B
+    - cron: '0 22 1 9 *' # Memicu Job C
+    - cron: '0 0 2 9 *' # Memicu Job D
+    - cron: '0 3 2 9 *' # Memicu Job E
+    - cron: '0 5 2 9 *' # Memicu Job F
+    - cron: '0 7 2 9 *' # Memicu Job G
+    - cron: '0 10 2 9 *' # Memicu Job H
+    - cron: '0 12 2 9 *' # Memicu Job I
+    - cron: '0 14 2 9 *' # Memicu Job J
+    - cron: '0 17 2 9 *' # Memicu Job K
+    - cron: '0 19 2 9 *' # Memicu Job L
+    - cron: '0 21 2 9 *' # Memicu Job M
+    - cron: '0 0 3 9 *' # Memicu Job N
+    - cron: '0 2 3 9 *' # Memicu Job O
+    - cron: '0 4 3 9 *' # Memicu Job P
+    - cron: '0 7 3 9 *' # Memicu Job Q
+    - cron: '0 9 3 9 *' # Memicu Job R
+
   workflow_dispatch:
 
 permissions:
@@ -26,8 +55,8 @@ permissions:
 
 jobs:
   job-a:
-    name: Job A (all-devices-ophub)
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 18 1 9 *'
+    name: Job A (all-devices-ophub openwrt:25.12.5)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 17 1 9 *'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -41,17 +70,17 @@ jobs:
             echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
             exit 0
           fi
-          
+
           gh workflow run Builds.yml \
             -f release_branch="openwrt:25.12.5" \
             -f rootfs_size="1024" \
             -f target="all-devices-ophub" \
-            -f tunnel="all-tunnel-v2" \
+            -f tunnel="openclash-clashoo" \
             -f clean="true"
 
   job-b:
-    name: Job B (all-devices-ulo)
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 4 2 9 *'
+    name: Job B (all-devices-ulo openwrt:25.12.5)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 20 1 9 *'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -65,17 +94,17 @@ jobs:
             echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
             exit 0
           fi
-          
+
           gh workflow run Builds.yml \
             -f release_branch="openwrt:25.12.5" \
             -f rootfs_size="1024" \
             -f target="all-devices-ulo" \
-            -f tunnel="all-tunnel-v2" \
+            -f tunnel="openclash-clashoo" \
             -f clean="true"
 
   job-c:
-    name: Job C (all-devices-official)
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 14 2 9 *'
+    name: Job C (all-devices-official openwrt:25.12.5)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 22 1 9 *'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -89,23 +118,23 @@ jobs:
             echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
             exit 0
           fi
-          
+
           gh workflow run Builds.yml \
             -f release_branch="openwrt:25.12.5" \
             -f rootfs_size="1024" \
             -f target="all-devices-official" \
-            -f tunnel="all-tunnel-v2" \
+            -f tunnel="openclash-clashoo" \
             -f clean="true"
 
   job-d:
-    name: Job D (opt-devices-official)
-    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 3 9 *'
+    name: Job D (all-devices-ophub openwrt:24.10.8)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 2 9 *'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
 
-      - name: Trigger Builds.yml - OPT OFFICIAL
+      - name: Trigger Builds.yml - OPHUB
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -113,10 +142,346 @@ jobs:
             echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
             exit 0
           fi
-          
+
           gh workflow run Builds.yml \
-            -f release_branch="openwrt:25.12.5" \
+            -f release_branch="openwrt:24.10.8" \
             -f rootfs_size="1024" \
-            -f target="opt-devices-official" \
-            -f tunnel="all-tunnel-v2" \
+            -f target="all-devices-ophub" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-e:
+    name: Job E (all-devices-ulo openwrt:24.10.8)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 3 2 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - ULO
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="openwrt:24.10.8" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-ulo" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-f:
+    name: Job F (all-devices-official openwrt:24.10.8)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 5 2 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - OFFICIAL
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="openwrt:24.10.8" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-official" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-g:
+    name: Job G (all-devices-ophub openwrt:23.05.6)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 7 2 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - OPHUB
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="openwrt:23.05.6" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-ophub" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-h:
+    name: Job H (all-devices-ulo openwrt:23.05.6)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 10 2 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - ULO
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="openwrt:23.05.6" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-ulo" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-i:
+    name: Job I (all-devices-official openwrt:23.05.6)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 12 2 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - OFFICIAL
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="openwrt:23.05.6" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-official" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-j:
+    name: Job J (all-devices-ophub immortalwrt:25.12.1)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 14 2 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - OPHUB
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="immortalwrt:25.12.1" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-ophub" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-k:
+    name: Job K (all-devices-ulo immortalwrt:25.12.1)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 17 2 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - ULO
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="immortalwrt:25.12.1" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-ulo" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-l:
+    name: Job L (all-devices-official immortalwrt:25.12.1)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 19 2 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - OFFICIAL
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="immortalwrt:25.12.1" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-official" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-m:
+    name: Job M (all-devices-ophub immortalwrt:24.10.6)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 21 2 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - OPHUB
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="immortalwrt:24.10.6" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-ophub" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-n:
+    name: Job N (all-devices-ulo immortalwrt:24.10.6)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 3 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - ULO
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="immortalwrt:24.10.6" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-ulo" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-o:
+    name: Job O (all-devices-official immortalwrt:24.10.6)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 2 3 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - OFFICIAL
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="immortalwrt:24.10.6" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-official" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-p:
+    name: Job P (all-devices-ophub immortalwrt:23.05.7)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 4 3 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - OPHUB
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="immortalwrt:23.05.7" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-ophub" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-q:
+    name: Job Q (all-devices-ulo immortalwrt:23.05.7)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 7 3 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - ULO
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="immortalwrt:23.05.7" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-ulo" \
+            -f tunnel="openclash-clashoo" \
+            -f clean="true"
+
+  job-r:
+    name: Job R (all-devices-official immortalwrt:23.05.7)
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 9 3 9 *'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Trigger Builds.yml - OFFICIAL
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$(date +'%Y')" != "2026" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Bukan tahun 2026. Membatalkan eksekusi otomatis."
+            exit 0
+          fi
+
+          gh workflow run Builds.yml \
+            -f release_branch="immortalwrt:23.05.7" \
+            -f rootfs_size="1024" \
+            -f target="all-devices-official" \
+            -f tunnel="openclash-clashoo" \
             -f clean="true"

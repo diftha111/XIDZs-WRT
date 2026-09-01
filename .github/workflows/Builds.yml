@@ -327,7 +327,7 @@ jobs:
       RELEASE_TAG: ${{ needs.prebuild.outputs.release_tag }}
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 10
       matrix:
         target: ${{ fromJSON(needs.prebuild.outputs.target) }}
 
